@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from evolve_mod import evolve
 
 # Set the colormap
 plt.rcParams['image.cmap'] = 'BrBG'
 
-def evolve(u, u_previous, a, dt, dx2, dy2):
+def evolve_py(u, u_previous, a, dt, dx2, dy2):
     """Explicit time evolution.
        u:            new temperature field
        u_previous:   previous field

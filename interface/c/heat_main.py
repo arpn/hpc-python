@@ -2,10 +2,15 @@ from __future__ import print_function
 import time
 import argparse
 
-from heat import init_fields, write_field, iterate
+# from heat import init_fields, write_field, iterate
+from heat_cffi import init_fields, write_field, iterate
+# CFFI version runs in ~0.05s whereas pure python runs in ~22s
+
+# CFFI for large input file 'bottle_large.dat' runs in 1.53s
+# Cython runs in 1.57s
 
 
-def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1, 
+def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1,
          timesteps=200, image_interval=4000):
 
     # Initialise the temperature field
@@ -19,7 +24,7 @@ def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1,
     print("  nx={} ny={} dx={} dy={}".format(field.shape[0], field.shape[1],
                                              dx, dy))
     print("  time steps={}  image interval={}".format(timesteps,
-                                                         image_interval))
+                                                      image_interval))
 
     # Plot/save initial field
     write_field(field, 0)
@@ -31,6 +36,7 @@ def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1,
     write_field(field, timesteps)
 
     print("Simulation finished in {0} s".format(t1-t0))
+
 
 if __name__ == '__main__':
 
@@ -46,10 +52,9 @@ if __name__ == '__main__':
                         help='number of time steps')
     parser.add_argument('-i', type=int, default=4000,
                         help='image interval')
-    parser.add_argument('-f', type=str, default='bottle.dat', 
+    parser.add_argument('-f', type=str, default='bottle.dat',
                         help='input file')
 
     args = parser.parse_args()
 
     main(args.f, args.a, args.dx, args.dy, args.n, args.i)
-
